@@ -71,8 +71,8 @@ class Apple(GameObjact):
 
     def draw(self, surface):
         rect = pygame.Rect(
-          (self.position[0], self.position[1]),
-          (GRID_SIZE, GRID_SIZE)
+        (self.position[0], self.position[1]),
+        (GRID_SIZE, GRID_SIZE)
         )
         pygame.draw.rect(surface, self.body_color, rect)
         pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
@@ -85,18 +85,30 @@ class Snake(GameObjact):
     direction = RIGHT
     next_direction = None
     body_color = SNAKE_COLOR
+    the_and = None
 
     def __init__(self, body_color=BORDER_COLOR):
         super().__init__(body_color)
         self.positions = self.update_direction()
 
-    def move(self):
-        pass
 
     def update_direction(self):
-       if self.next_direction:
-          self.direction = self.next_direction
-          self.next_direction = None
+        if self.next_direction:
+            self.direction = self.next_direction
+            self.next_direction = None
+
+
+    def move(self):
+        head_position = self.get_head_position()
+        new_head_position = (head_position + (self.direction[0] * GRID_SIZE), head_position + (self.direction[1] * GRID_SIZE))
+        self.positions.insert(0, new_head_position)
+        if len(self.positions) > self.length:
+            self.the_end = self.positions.pop()
+
+
+
+
+
 
     def draw(self, surface):
         for position in self.positions[:-1]:
@@ -106,14 +118,26 @@ class Snake(GameObjact):
             pygame.draw.rect(surface, self.body_color, rect)
             pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
 
-        
+            head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
+        pygame.draw.rect(surface, self.body_color, head_rect)
+        pygame.draw.rect(surface, BORDER_COLOR, head_rect, 1)
+
+        # Затирание последнего сегмента
+        if self.last:
+            last_rect = pygame.Rect(
+              (self.last[0], self.last[1]),
+              (GRID_SIZE, GRID_SIZE)
+            )
+            pygame.draw.rect(surface, BOARD_BACKGROUND_COLOR, last_rect)
+
+
     def get_head_position(self):
-        pass
+        return self.positions[0]
 
 
     def reset(self):
         pass
-    
+
 
 def handle_keys(game_object):
     for event in pygame.event.get():
@@ -155,27 +179,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-=
-
-# # Метод draw класса Snake
-# 
-
-#     # Отрисовка головы змейки
-#     head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
-#     pygame.draw.rect(surface, self.body_color, head_rect)
-#     pygame.draw.rect(surface, BORDER_COLOR, head_rect, 1)
-
-#     # Затирание последнего сегмента
-#     if self.last:
-#         last_rect = pygame.Rect(
-#             (self.last[0], self.last[1]),
-#             (GRID_SIZE, GRID_SIZE)
-#         )
-#         pygame.draw.rect(surface, BOARD_BACKGROUND_COLOR, last_rect)
-
-
-# 
-
-
+    
