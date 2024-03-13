@@ -1,5 +1,4 @@
 from random import choice, randint
-
 import pygame
 
 # Инициализация PyGame:
@@ -43,19 +42,82 @@ clock = pygame.time.Clock()
 
 
 # Тут опишите все классы игры.
-...
+class GameObjact:
+    
+    body_color = BOARD_BACKGROUND_COLOR
 
+    def __init__(self, position, body_color=BORDER_COLOR):
+        self.position = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
+        self.body_color = body_color
+
+    
+    def draw(self):
+        pass
+
+
+
+class Apple(GameObjact):
+    pass
+
+class Snake(GameObjact):
+    
+    length = 1
+    positions = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
+    direction = RIGHT
+    next_direction = None
+    body_color = SNAKE_COLOR
+
+    def __init__(self, positions, body_color):
+        super(GameObjact).__init__()
+
+    def update_direction(self):
+       if self.next_direction:
+          self.direction = self.next_direction
+          self.next_direction = None
+
+    def draw(self, surface):
+       for position in self.positions[:-1]:
+          rect = (
+              pygame.Rect((position[0], position[1]), (GRID_SIZE, GRID_SIZE))
+          )
+          pygame.draw.rect(surface, self.body_color, rect)
+          pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+    
+
+def handle_keys(game_object):
+      for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              pygame.quit()
+              raise SystemExit
+          elif event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_UP and game_object.direction != DOWN:
+                  game_object.next_direction = UP
+              elif event.key == pygame.K_DOWN and game_object.direction != UP:
+                  game_object.next_direction = DOWN
+              elif event.key == pygame.K_LEFT and game_object.direction != RIGHT:
+                  game_object.next_direction = LEFT
+              elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
+                  game_object.next_direction = RIGHT
+    
 
 def main():
-    # Тут нужно создать экземпляры классов.
-    ...
+    
+    
 
-    # while True:
-    #     clock.tick(SPEED)
+    while True:
+        clock.tick(SPEED)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+
 
         # Тут опишите основную логику игры.
         # ...
+        pygame.display.update()
 
+        
 
 if __name__ == '__main__':
     main()
@@ -71,13 +133,7 @@ if __name__ == '__main__':
 #     pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
 
 # # Метод draw класса Snake
-# def draw(self, surface):
-#     for position in self.positions[:-1]:
-#         rect = (
-#             pygame.Rect((position[0], position[1]), (GRID_SIZE, GRID_SIZE))
-#         )
-#         pygame.draw.rect(surface, self.body_color, rect)
-#         pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+# 
 
 #     # Отрисовка головы змейки
 #     head_rect = pygame.Rect(self.positions[0], (GRID_SIZE, GRID_SIZE))
@@ -92,24 +148,7 @@ if __name__ == '__main__':
 #         )
 #         pygame.draw.rect(surface, BOARD_BACKGROUND_COLOR, last_rect)
 
-# Функция обработки действий пользователя
-# def handle_keys(game_object):
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             pygame.quit()
-#             raise SystemExit
-#         elif event.type == pygame.KEYDOWN:
-#             if event.key == pygame.K_UP and game_object.direction != DOWN:
-#                 game_object.next_direction = UP
-#             elif event.key == pygame.K_DOWN and game_object.direction != UP:
-#                 game_object.next_direction = DOWN
-#             elif event.key == pygame.K_LEFT and game_object.direction != RIGHT:
-#                 game_object.next_direction = LEFT
-#             elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
-#                 game_object.next_direction = RIGHT
 
-# Метод обновления направления после нажатия на кнопку
-# def update_direction(self):
-#     if self.next_direction:
-#         self.direction = self.next_direction
-#         self.next_direction = None
+# 
+
+
