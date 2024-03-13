@@ -60,9 +60,15 @@ class Apple(GameObjact):
 
     def __init__(self, body_color=BORDER_COLOR):
         super().__init__( body_color)
+        self.position = self.randomize_position()
 
 
-    def draw(self):
+    def randomize_position(self):
+        return (randint(0, GRID_HEIGHT) * GRID_SIZE,
+               randint(0, GRID_WIDTH) * GRID_SIZE
+        )
+
+    def draw(self, surface):
         rect = pygame.Rect(
           (self.position[0], self.position[1]),
           (GRID_SIZE, GRID_SIZE)
@@ -114,6 +120,7 @@ def handle_keys(game_object):
 
 def main():
     
+    apple = Apple()
     
 
     while True:
@@ -123,6 +130,8 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+            
+        apple.draw(screen)
 
 
         # Тут опишите основную логику игры.
