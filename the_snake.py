@@ -43,21 +43,33 @@ clock = pygame.time.Clock()
 
 # Тут опишите все классы игры.
 class GameObjact:
-    
     body_color = BOARD_BACKGROUND_COLOR
 
-    def __init__(self, position, body_color=BORDER_COLOR):
+
+    def __init__(self, body_color=BORDER_COLOR):
         self.position = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
         self.body_color = body_color
 
-    
+
     def draw(self):
         pass
 
 
-
 class Apple(GameObjact):
-    pass
+
+
+    def __init__(self, body_color=BORDER_COLOR):
+        super().__init__( body_color)
+
+
+    def draw(self):
+        rect = pygame.Rect(
+          (self.position[0], self.position[1]),
+          (GRID_SIZE, GRID_SIZE)
+        )
+        pygame.draw.rect(surface, self.body_color, rect)
+        pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+
 
 class Snake(GameObjact):
     
