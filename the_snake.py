@@ -59,14 +59,15 @@ class Apple(GameObjact):
 
 
     def __init__(self, body_color=BORDER_COLOR):
-        super().__init__( body_color)
+        super().__init__(body_color)
         self.position = self.randomize_position()
 
 
     def randomize_position(self):
         return (randint(0, GRID_HEIGHT) * GRID_SIZE,
-               randint(0, GRID_WIDTH) * GRID_SIZE
+                randint(0, GRID_WIDTH) * GRID_SIZE
         )
+
 
     def draw(self, surface):
         rect = pygame.Rect(
@@ -80,13 +81,17 @@ class Apple(GameObjact):
 class Snake(GameObjact):
     
     length = 1
-    positions = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
+    positions = [(SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2)]
     direction = RIGHT
     next_direction = None
     body_color = SNAKE_COLOR
 
-    def __init__(self, positions, body_color):
-        super(GameObjact).__init__()
+    def __init__(self, body_color=BORDER_COLOR):
+        super().__init__(body_color)
+        self.positions = self.update_direction()
+
+    def move(self):
+        pass
 
     def update_direction(self):
        if self.next_direction:
@@ -94,34 +99,42 @@ class Snake(GameObjact):
           self.next_direction = None
 
     def draw(self, surface):
-       for position in self.positions[:-1]:
-          rect = (
-              pygame.Rect((position[0], position[1]), (GRID_SIZE, GRID_SIZE))
-          )
-          pygame.draw.rect(surface, self.body_color, rect)
-          pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+        for position in self.positions[:-1]:
+            rect = (
+            pygame.Rect((position[0], position[1]), (GRID_SIZE, GRID_SIZE))
+            )
+            pygame.draw.rect(surface, self.body_color, rect)
+            pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+
+        
+    def get_head_position(self):
+        pass
+
+
+    def reset(self):
+        pass
     
 
 def handle_keys(game_object):
-      for event in pygame.event.get():
-          if event.type == pygame.QUIT:
-              pygame.quit()
-              raise SystemExit
-          elif event.type == pygame.KEYDOWN:
-              if event.key == pygame.K_UP and game_object.direction != DOWN:
-                  game_object.next_direction = UP
-              elif event.key == pygame.K_DOWN and game_object.direction != UP:
-                  game_object.next_direction = DOWN
-              elif event.key == pygame.K_LEFT and game_object.direction != RIGHT:
-                  game_object.next_direction = LEFT
-              elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
-                  game_object.next_direction = RIGHT
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            raise SystemExit
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and game_object.direction != DOWN:
+                game_object.next_direction = UP
+            elif event.key == pygame.K_DOWN and game_object.direction != UP:
+                game_object.next_direction = DOWN
+            elif event.key == pygame.K_LEFT and game_object.direction != RIGHT:
+                game_object.next_direction = LEFT
+            elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
+                game_object.next_direction = RIGHT
     
 
 def main():
     
     apple = Apple()
-    
+    snake = Snake()
 
     while True:
         clock.tick(SPEED)
@@ -132,7 +145,7 @@ def main():
                 return
             
         apple.draw(screen)
-
+        snake.draw(screen)
 
         # Тут опишите основную логику игры.
         # ...
@@ -144,14 +157,7 @@ if __name__ == '__main__':
     main()
 
 
-# Метод draw класса Apple
-# def draw(self, surface):
-#     rect = pygame.Rect(
-#         (self.position[0], self.position[1]),
-#         (GRID_SIZE, GRID_SIZE)
-#     )
-#     pygame.draw.rect(surface, self.body_color, rect)
-#     pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
+=
 
 # # Метод draw класса Snake
 # 
