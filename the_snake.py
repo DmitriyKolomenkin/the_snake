@@ -3,7 +3,7 @@ from random import choice, randint
 import pygame
 
 # Инициализация PyGame:
-pygame.init()
+
 
 # Константы для размеров поля и сетки:
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
@@ -46,6 +46,7 @@ clock = pygame.time.Clock()
 
 
 class GameObjact:
+    '''родительский класс, необходимый для создания игровой доски'''
     body_color = BOARD_BACKGROUND_COLOR
 
     def __init__(self, body_color=BORDER_COLOR):
@@ -78,11 +79,11 @@ class Snake(GameObjact):
     def __init__(self, body_color=BORDER_COLOR):
         super().__init__(body_color)
         self.length = 1
-        self.positions = [((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))]
-        self.direction = RIGHT
+        self.positions = self.position
+        self.direction = UP
         self.next_direction = None
         self.body_color = SNAKE_COLOR
-        self.last = None
+        self.last = ()
 
     def update_direction(self):
         if self.next_direction:
@@ -90,14 +91,23 @@ class Snake(GameObjact):
             self.next_direction = None
 
     def move(self):
-        head_position = self.get_head_position()
-        new_head_position = (
-            head_position + (self.direction[0] * GRID_SIZE),
-            head_position + (self.direction[1] * GRID_SIZE))
-        self.positions.insert(0, new_head_position)
+        # new_head = (self.positions[0][0] + self.direction[0], self.positions[0][1] + self.direction[1])
 
+        # # Перемещаем змейку, удаляя последний сегмент
+        # self.positions = [new_head] + self.positions[:-1]
+        self.positions.append(self.get_head_position())
+        x = self.direction[0] * GRID_SIZE
+        y = self.direction[1] * GRID_SIZE
+        position_x = (self.get_head_position()[0] + x) % SCREEN_WIDTH
+        position_y = (self.get_head_position()[1] + y) % SCREEN_HEIGHT
+        snake_head = (position_x, position_y)
+        self.positions.insert(0, snake_head)
         if len(self.positions) > self.length:
-            self.last = self.positions.pop()
+            self.length += 1
+            # self.positions.pop()
+            self.last = self.positions[-1]
+            
+
 
     def draw(self, surface):
         for position in self.positions[:-1]:
@@ -145,33 +155,29 @@ def handle_keys(game_object):
 
 
 def main():
-
+    pygame.init()
     apple = Apple()
     snake = Snake()
 
     while True:
-        clock.tick(SPEED)
         handle_keys(snake)
-        snake.move()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+        apple.draw(screen)
+        snake.update_direction()
+        snake.move()
+        snake.draw(screen)
         
         if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.position = apple.randomize_position()
 
-        if snake.get_head_position in snake.positions[1:]:
-            snake.reset()
-        
-
-        apple.draw(screen)
-        snake.draw(screen)
-
         # Тут опишите основную логику игры.
         # ...
         pygame.display.update()
+        clock.tick(SPEED)
 
 
 if __name__ == '__main__':
