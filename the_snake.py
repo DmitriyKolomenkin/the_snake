@@ -44,7 +44,7 @@ clock = pygame.time.Clock()
 # Тут опишите все классы игры.
 
 
-class GameObjact:
+class GameObject:
     """
     Родительский класс,
     необходимый для отрисовки обьектов и определения центра экрана.
@@ -62,7 +62,7 @@ class GameObjact:
         pass
 
 
-class Apple(GameObjact):
+class Apple(GameObject):
     """Класс Apple необходим для создания обьекта."""
 
     def __init__(self, body_color=BORDER_COLOR):
@@ -90,7 +90,7 @@ class Apple(GameObjact):
         pygame.draw.rect(surface, BORDER_COLOR, rect, 1)
 
 
-class Snake(GameObjact):
+class Snake(GameObject):
     """Дочерний класс для создания змейки."""
 
     def __init__(self, body_color=SNAKE_COLOR):
