@@ -45,17 +45,13 @@ class GameObject:
         self.position = SCREEN_CENTER
         self.body_color = body_color
 
-    def draw(self):
-        """Этот метод создается здесь,
-        чтобы каждый раз его не инициализировать в дочерних классах.
-        """
+    def draw(self, surface):
+        """Отрисовка объектов."""
         pass
 
 
 class Apple(GameObject):
-    """Класс Apple необходим для создания обьекта 'яблоко',
-    так же исключает появление яблочка в теле змеи.
-    """
+    """Класс игрового объекта 'Apple'."""
 
     def __init__(self, body_color=APPLE_COLOR):
         """Наследуем некоторые атрибуты из родительского класса."""
@@ -66,14 +62,6 @@ class Apple(GameObject):
         """Находим случайную точку на сетке."""
         return (randint(1, GRID_WIDTH) * GRID_SIZE - GRID_SIZE,
                 randint(1, GRID_HEIGHT) * GRID_SIZE - GRID_SIZE)
-
-    def change_apple_place(self, snake_tail=None):
-        """Переопределяем координаты яблока,
-        если то появилось внутри змейки.
-        """
-        while self.position == snake_tail:
-            self.position = self.randomize_position()
-        return self.position
 
     def draw(self, surface):
         """Отрисовываем яблочко."""
@@ -88,9 +76,7 @@ class Snake(GameObject):
     """Дочерний класс для создания змейки."""
 
     def __init__(self, body_color=SNAKE_COLOR):
-        """Змеиные атрибуты: начальное положение,
-        начальное положение, цвет и длинна.
-        """
+        """Змеиные атрибуты: начальное положение, цвет и длинна."""
         super().__init__(self)
         self.length = 1
         self.positions = [self.position]
@@ -131,7 +117,6 @@ class Snake(GameObject):
         pygame.draw.rect(surface, self.body_color, head_rect)
         pygame.draw.rect(surface, BORDER_COLOR, head_rect, 1)
 
-        # Затирание последнего сегмента
         if self.last:
             last_rect = pygame.Rect(
                 (self.last[0], self.last[1]),
@@ -147,7 +132,8 @@ class Snake(GameObject):
         """Метод, для обновления игры."""
         self.length = 1
         self.positions = [SCREEN_CENTER]
-        self.direction = choice(DIRECRIONS)
+        self.next_direction = choice(DIRECRIONS)
+        self.last = None
 
 
 def handle_keys(game_object):
@@ -188,12 +174,13 @@ def main():
             snake.reset()
             screen.fill(BOARD_BACKGROUND_COLOR)
 
+        if apple.position == snake.positions:
+            apple.randomize_position()
+
         snake.move()
         apple.draw(screen)
         snake.draw(screen)
 
-        # Тут опишите основную логику игры.
-        # ...
         pygame.display.update()
         clock.tick(SPEED)
 
