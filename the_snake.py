@@ -134,6 +134,7 @@ class Snake(GameObject):
         self.positions = [SCREEN_CENTER]
         self.next_direction = choice(DIRECRIONS)
         self.last = None
+        screen.fill(BOARD_BACKGROUND_COLOR)
 
 
 def handle_keys(game_object):
@@ -172,7 +173,6 @@ def main():
 
         if snake.get_head_position() in snake.positions[2:]:
             snake.reset()
-            screen.fill(BOARD_BACKGROUND_COLOR)
 
         if apple.position == snake.positions:
             apple.randomize_position()
