@@ -133,6 +133,7 @@ class Snake(GameObject):
         screen.fill(BOARD_BACKGROUND_COLOR)
 
     def initialize_snake(self):
+        """Метод, который хранит атрибуты Змеи"""
         self.length = 1
         self.positions = [SCREEN_CENTER]
         self.direction = RIGHT
