@@ -129,14 +129,14 @@ class Snake(GameObject):
     def reset(self):
         """Метод, для обновления игры."""
         self.initialize_snake()
-        self.next_direction = choice(DIRECRIONS) 
+        self.next_direction = choice(DIRECRIONS)
         screen.fill(BOARD_BACKGROUND_COLOR)
 
     def initialize_snake(self, body_color=SNAKE_COLOR):
+        """Метод, хранящий атрибуты."""
         self.length = 1
         self.positions = [SCREEN_CENTER]
         self.last = None
-
 
 
 def handle_keys(game_object):
