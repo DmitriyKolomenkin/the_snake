@@ -79,9 +79,9 @@ class Snake(GameObject):
         """Змеиные атрибуты: начальное положение, цвет и длинна."""
         super().__init__(self)
         self.initialize_snake()
+        self.body_color = body_color
         self.next_direction = None
         self.direction = RIGHT
-        self.body_color = body_color
 
     def update_direction(self):
         """Обновляем направление после нажатия клавишь."""
@@ -129,14 +129,14 @@ class Snake(GameObject):
     def reset(self):
         """Метод, для обновления игры."""
         self.initialize_snake()
-        self.next_direction = choice(DIRECRIONS)
+        self.next_direction = choice(DIRECRIONS) 
         screen.fill(BOARD_BACKGROUND_COLOR)
 
-    def initialize_snake(self):
-        """Метод, который хранит атрибуты Змеи"""
+    def initialize_snake(self, body_color=SNAKE_COLOR):
         self.length = 1
         self.positions = [SCREEN_CENTER]
-        self.direction = RIGHT
+        self.last = None
+
 
 
 def handle_keys(game_object):
@@ -173,10 +173,7 @@ def main():
             snake.reset()
 
         while apple.position in snake.positions:
-            new_pos = apple.randomize_position()
-            if new_pos is not None:
-                apple.position = new_pos
-                break
+            apple.position = apple.randomize_position()
 
         snake.move()
         apple.draw(screen)
